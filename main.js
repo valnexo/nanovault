@@ -1,23 +1,40 @@
-const { app, BrowserWindow, shell, Menu, protocol, webFrame } = require('electron');
+const { app, BrowserWindow, shell, Menu, protocol, webFrame, ipcMain } = require('electron');
 const autoUpdater = require('electron-updater').autoUpdater;
 const url = require('url');
 const path = require('path');
 
+// const TransportNodeHid = require('@ledgerhq/hw-transport-node-hid');
+
 app.setAsDefaultProtocolClient('xrb'); // Register handler for xrb: links
 
+console.log(`Starting ledger@!`);
+
+const ledger = require('./desktop-app/src/lib/ledger');
+
+ledger.initialize();
+
+// const Ledger = new ledger();
+
+// Ledger.loadLedger();
+
 let mainWindow;
+
+// global['LedgerTransport'] = TransportNodeHid;
 
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 1000, height: 600, webPreferences: { webSecurity: false } });
   // const options = { extraHeaders: "pragma: no-cache\n" };
   // mainWindow.loadURL('https://nanovault.io', options);
-  // mainWindow.loadURL('http://localhost:4200/');
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'dist/index.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
+  mainWindow.loadURL('http://localhost:4200/');
+  // mainWindow.loadURL(url.format({
+  //   pathname: path.join(__dirname, 'dist/index.html'),
+  //   protocol: 'file:',
+  //   slashes: true
+  // }));
+
+  // mainWindow.LedgerTransport = TransportU2F;
+  // mainWindow.webContents.
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
